@@ -14,10 +14,10 @@ For each subject:
 rawWeight = (Difficulty + Content) × Weight
 factor1   = sum of rawWeight across all subjects
 factor3   = weekly hours available ÷ factor1
-Hours for the subject = FLOOR(rawWeight × factor3)
+raw hours for the subject = rawWeight × factor3   (a fraction, e.g. 12.6h)
 ```
 
-Rounding is always down, so the total planned hours can end up slightly below the weekly hours you entered; that's expected.
+Flooring every subject's raw hours independently would lose the fractional part of each one, so the total could end up several hours short of the weekly target. Instead, hours are assigned with the "largest remainder" method (the same idea used to apportion seats in elections): every subject is floored first, then the few hours still missing are handed out, one each, to the subjects with the largest fractional remainder. The total always matches the weekly hours you entered exactly (for a whole-number target), and never exceeds it.
 
 ## Features
 

@@ -28,16 +28,38 @@ function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-// Same formula as the original spreadsheet:
+// Same base formula as the original spreadsheet:
 // rawWeight = (Difficulty + Content) * Weight
 // factor1 = sum of rawWeight across all subjects
 // factor3 = weekly hours available / factor1
-// hours for a subject = FLOOR(rawWeight * factor3)
+// raw hours for a subject = rawWeight * factor3 (a fraction, e.g. 12.6h)
+//
+// Flooring every subject's raw hours independently (the original spreadsheet's
+// approach) always loses the fractional part of each one, so the total can end
+// up several hours short of the weekly target. Instead we use the "largest
+// remainder" method (the same idea used to apportion seats in elections):
+// floor every subject first, then hand out the few hours still missing, one
+// each, to the subjects with the largest fractional remainder. This makes the
+// total always match the weekly hours exactly (assuming a whole-number
+// target), without ever exceeding it.
 function computeResults() {
   const rawWeights = state.subjects.map(s => (Number(s.dificuldade) + Number(s.conteudo)) * Number(s.peso));
   const factor1 = rawWeights.reduce((a, b) => a + b, 0);
   const factor3 = factor1 > 0 ? state.weeklyHours / factor1 : 0;
-  const results = rawWeights.map(rw => Math.floor(rw * factor3 + 1e-9));
+  const raw = rawWeights.map(rw => rw * factor3);
+
+  const targetTotal = Math.floor(state.weeklyHours + 1e-9);
+  const results = raw.map(r => Math.floor(r + 1e-9));
+  const allocated = results.reduce((a, b) => a + b, 0);
+  let remaining = targetTotal - allocated;
+
+  const byRemainder = raw
+    .map((r, i) => ({ i, remainder: r - results[i] }))
+    .sort((a, b) => b.remainder - a.remainder);
+  for (let k = 0; k < remaining && k < byRemainder.length; k++) {
+    results[byRemainder[k].i] += 1;
+  }
+
   return { rawWeights, factor1, factor3, results };
 }
 
