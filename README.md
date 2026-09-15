@@ -4,7 +4,7 @@
 
 A lightweight desktop app (Windows, Linux, macOS) that plans a weekly study cycle. You add subjects, set how many hours you have available per week, and the app distributes those hours across subjects automatically. Each subject gets a row of small squares (one per hour) that you can check off manually as you study.
 
-Ported from a single-file HTML prototype into a native app with [Tauri](https://tauri.app), so it ships as a small, fast executable instead of a browser tab — no bundled Chromium, no backend server.
+Ported from a single-file HTML prototype into a native app with [Tauri](https://tauri.app), so it ships as a small, fast executable instead of a browser tab: no bundled Chromium, no backend server.
 
 ## How the calculation works
 
@@ -17,19 +17,19 @@ factor3   = weekly hours available ÷ factor1
 Hours for the subject = FLOOR(rawWeight × factor3)
 ```
 
-Rounding is always down, so the total planned hours can end up slightly below the weekly hours you entered — that's expected.
+Rounding is always down, so the total planned hours can end up slightly below the weekly hours you entered; that's expected.
 
 ## Features
 
 - Add/edit/remove subjects with Difficulty (1-5), Weight (any number ≥ 0) and Content (1-5)
 - Automatic distribution of weekly hours across subjects
-- Progress squares (one per hour) — click to check/uncheck
+- Progress squares (one per hour) that you click to check/uncheck
 - "Reset week" clears the checked squares; "Clear all" wipes subjects/hours back to a blank slate
 - Everything is saved locally (no account, no server, no internet connection required)
 
 ## Stack
 
-- [Tauri 2](https://tauri.app) (Rust + the OS's native webview — WebView2 on Windows, WKWebView on macOS, WebKitGTK on Linux)
+- [Tauri 2](https://tauri.app) (Rust + the OS's native webview: WebView2 on Windows, WKWebView on macOS, WebKitGTK on Linux)
 - Plain HTML/CSS/JS frontend, no framework, no build step
 - State persisted with `localStorage` inside the app's webview
 
@@ -58,7 +58,7 @@ This produces a native installer/bundle for the OS you run it on:
 | Windows | `.msi` and `.exe` (NSIS) installers |
 | macOS | `.app` and `.dmg` |
 
-Tauri does not meaningfully cross-compile GUI bundles between operating systems — to get all three installers you build on (or via CI for) each target OS. The included [`.github/workflows/build.yml`](.github/workflows/build.yml) does this automatically: pushing a tag builds and attaches the Windows, Linux and macOS bundles to a GitHub Release.
+Tauri does not meaningfully cross-compile GUI bundles between operating systems. To get all three installers, you build on (or via CI for) each target OS. The included [`.github/workflows/build.yml`](.github/workflows/build.yml) does this automatically: pushing a tag builds and attaches the Windows, Linux and macOS bundles to a GitHub Release.
 
 > Note: building the `.AppImage` locally requires FUSE (`fusermount`); on some systems the bundled `linuxdeploy` tool's `strip` binary is also too old to handle ELF binaries produced by very new toolchains (fails on the `.relr.dyn` section). If that happens, the `.deb`/`.rpm` bundles still build fine, and CI (which uses a standard Ubuntu runner) builds the `.AppImage` without issue.
 
