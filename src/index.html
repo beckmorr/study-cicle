@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Study Cycle</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <h1>Study Cycle</h1>
+
+  <div class="card">
+    <h2>Weekly hours available</h2>
+    <div class="hours-row">
+      <label for="weeklyHours">Total hours per week:</label>
+      <input type="number" id="weeklyHours" min="0" step="1">
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Subjects</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Difficulty (1-5)</th>
+          <th>Weight</th>
+          <th>Content (1-5)</th>
+          <th>Hours/week</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="subjectsBody"></tbody>
+    </table>
+    <button class="add-btn" id="addSubjectBtn">+ Add subject</button>
+  </div>
+
+  <div class="card">
+    <div class="top-actions">
+      <button class="reset-btn" id="clearAllBtn">Clear all</button>
+      <button class="reset-btn" id="resetProgressBtn">Reset week (uncheck all)</button>
+    </div>
+    <h2>Weekly progress</h2>
+    <div id="progressContainer"></div>
+  </div>
+</div>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>
